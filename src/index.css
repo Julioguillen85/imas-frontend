@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  --color-imas-pink: #E52E71;
+  --color-imas-pinkHover: #C2185B;
+  --color-imas-navy: #0F172A;
+  --color-imas-slate: #1E293B;
+  --color-imas-lightBg: #F8FAFC;
+}
+
+.font-script {
+  font-family: 'Caveat', 'Dancing Script', cursive, sans-serif;
+}
+
+.logo-text-shadow {
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.logo-reflection {
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+}
+
+@keyframes heroRevealText {
+  0% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+.hero-reveal-text {
+  animation: heroRevealText 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-mask-line {
+  overflow: hidden;
+  display: block;
+}
+
+.mix-blend-difference {
+  mix-blend-mode: difference;
+}
+
+/* Marquee infinito horizontal */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Animación de agitar / wiggle para el botón de IA flotante */
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(-3deg) scale(1);
+  }
+  25% {
+    transform: rotate(3deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(-3deg) scale(1.03);
+  }
+  75% {
+    transform: rotate(3deg) scale(1.05);
+  }
+}
+
+.animate-wiggle {
+  animation: wiggle 2.5s ease-in-out infinite;
+}
