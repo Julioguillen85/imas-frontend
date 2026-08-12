@@ -195,8 +195,8 @@ export default function Footer({ adminToken, onOpenQuote }) {
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="leading-tight pt-1 flex flex-col gap-1.5">
-                  <a href={`tel:${(settings.footer_phone || '+52 (314) 105 3428').replace(/[^+\d]/g, '')}`} className="hover:underline font-bold text-white text-sm">
-                    {settings.footer_phone || '+52 (314) 105 3428'}
+                  <a href={`tel:${(settings.footer_phone || '+52 (618) 151 0581').replace(/[^+\d]/g, '')}`} className="hover:underline font-bold text-white text-sm">
+                    {settings.footer_phone || '+52 (618) 151 0581'}
                   </a>
                 </div>
               </li>
@@ -383,7 +383,7 @@ export default function Footer({ adminToken, onOpenQuote }) {
             </a>
 
             <a
-              href="https://wa.me/523141053428?text=Hola%20IMAS%20Agencia%20Aduanal,%20deseo%20más%20información"
+              href="https://wa.me/526181510581?text=Hola%20IMAS%20Agencia%20Aduanal,%20deseo%20m%C3%A1s%20informaci%C3%B3n"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp IMAS"

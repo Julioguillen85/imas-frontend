@@ -219,7 +219,7 @@ export default function App() {
                 </a>
 
                 <a
-                  href="https://wa.me/523141053428?text=Hola%20IMAS%20Agencia%20Aduanal,%20deseo%20más%20información"
+                  href="https://wa.me/526181510581?text=Hola%20IMAS%20Agencia%20Aduanal,%20deseo%20m%C3%A1s%20informaci%C3%B3n"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
@@ -299,7 +299,7 @@ export default function App() {
                   <span>Instagram</span>
                 </a>
                 <a
-                  href="https://wa.me/523141053428?text=Hola%20IMAS%20Agencia%20Aduanal,%20deseo%20más%20información"
+                  href="https://wa.me/526181510581?text=Hola%20IMAS%20Agencia%20Aduanal,%20deseo%20m%C3%A1s%20informaci%C3%B3n"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold bg-slate-900 px-3.5 py-1.5 rounded-full border border-slate-800"

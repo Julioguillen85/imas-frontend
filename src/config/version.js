@@ -1,2 +1,2 @@
 // Versión global de despliegue para verificación visual y en consola
-export const APP_VERSION = 'v1.0.5-PROD (12-AUG-2026 15:41)';
+export const APP_VERSION = 'v1.0.5 (12/08/2026)';
