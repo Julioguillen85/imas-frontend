@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Bot, ArrowRight, ShieldCheck, Zap, Scale, TrendingUp,
   FileCheck2, Anchor, Truck, Sparkles, Check, ChevronRight,
-  MapPin, Mail, Phone, MessageSquareCode, X, Send, Globe2, Lock, LogOut, ShieldAlert
+  MapPin, Mail, Phone, MessageSquareCode, X, Send, Globe2, Lock, LogOut, ShieldAlert, Menu
 } from 'lucide-react';
 import VideoHero from './components/VideoHero';
 import MarqueeServices from './components/MarqueeServices';
@@ -19,6 +19,7 @@ import ContactQuoteModal from './components/ContactQuoteModal';
 export default function App() {
   const [chatOpen, setChatOpen] = useState(false);
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   // Path Routing State (para gestionar /admin de forma limpia)
@@ -98,11 +99,11 @@ export default function App() {
   // 2. RUTA PÚBLICA (LANDING PAGE COMERCIAL)
   // =========================================================================
   return (
-    <div className="bg-[#1b050f] text-slate-100 font-sans antialiased min-h-screen selection:bg-imas-pink selection:text-white relative">
+    <div className="bg-[#090206] text-slate-100 font-sans antialiased min-h-screen selection:bg-imas-pink selection:text-white relative">
 
-      {/* AMBIENTE ROSA FLAMENCO TRANSPARENTOSO DE FONDO */}
-      <div className="fixed inset-0 bg-gradient-to-br from-[#E52E71]/20 via-[#2d0716]/90 to-[#14030a] pointer-events-none z-0" />
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-imas-pink/15 via-transparent to-transparent pointer-events-none z-0 blur-3xl" />
+      {/* AMBIENTE NEGRO / ROSA OBSCURO ELEGANTE DE FONDO */}
+      <div className="fixed inset-0 bg-gradient-to-br from-[#E52E71]/10 via-[#12020a]/95 to-[#050103] pointer-events-none z-0" />
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-imas-pink/8 via-transparent to-transparent pointer-events-none z-0 blur-3xl" />
 
       {/* LIENZO INTERACTIVO DE RED NEURONAL LOGÍSTICA CON RATÓN */}
       <LogisticsCanvas />
@@ -134,10 +135,10 @@ export default function App() {
 
       {/* 1. HEADER — Rosa flamenco con transparencia al bajar */}
       <header
-        className={`sticky ${adminToken ? 'top-8' : 'top-0'} z-50 transition-all duration-300`}
+        className={`sticky ${adminToken ? 'top-8' : 'top-0'} z-50 transition-all duration-300 w-full overflow-hidden`}
         style={{
           background: scrolled
-            ? 'rgba(229,46,113,0.55)'
+            ? 'rgba(229,46,113,0.85)'
             : 'rgba(229,46,113,1)',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
@@ -147,15 +148,17 @@ export default function App() {
           borderBottom: scrolled ? '1px solid rgba(255,255,255,0.12)' : 'none',
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
+          {/* LOGO OFICIAL */}
           <a href="#inicio" className="flex items-center group flex-shrink-0">
             <img
               src="/images/logo1.png"
               alt="IMAS Agencia Aduanal"
-              className="h-11 sm:h-12 w-auto object-contain filter drop-shadow-md group-hover:scale-105 transition-transform"
+              className="h-8 sm:h-12 w-auto object-contain filter drop-shadow-md group-hover:scale-105 transition-transform"
             />
           </a>
 
+          {/* NAVEGACIÓN DESKTOP */}
           <nav className="hidden lg:flex items-center gap-1.5 font-bold text-slate-950 text-sm bg-slate-950/15 p-1.5 rounded-full border border-white/20 shadow-inner backdrop-blur-md">
             {[
               { name: 'Inicio', href: '#inicio' },
@@ -176,29 +179,30 @@ export default function App() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          {/* ACCIONES HEADER */}
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {/* Botón Cotizar Rápido */}
             <button
               onClick={() => setQuoteModalOpen(true)}
-              className="bg-white hover:bg-slate-100 text-[#E52E71] text-xs sm:text-sm font-extrabold px-4 py-2.5 rounded-full transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+              className="bg-white hover:bg-slate-100 text-[#E52E71] text-xs sm:text-sm font-extrabold px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-full transition-all shadow-md flex items-center gap-1 cursor-pointer"
             >
               <span>Cotizar</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             </button>
 
             {/* Botón IA */}
             <button
               onClick={() => setChatOpen(true)}
-              className="bg-slate-950 hover:bg-slate-800 text-white text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full transition-all shadow-lg shadow-black/30 flex items-center gap-2 group cursor-pointer"
+              className="bg-slate-950 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold px-2.5 sm:px-5 py-1.5 sm:py-2.5 rounded-full transition-all shadow-lg shadow-black/30 flex items-center gap-1.5 group cursor-pointer"
             >
-              <Bot className="w-4 h-4 text-imas-pink group-hover:rotate-12 transition-transform" />
+              <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-imas-pink group-hover:rotate-12 transition-transform" />
               <span className="hidden sm:inline">Chatea con IA</span>
               <span className="sm:hidden">IA</span>
             </button>
 
-            {/* REDES SOCIALES */}
-            <div className="flex items-center gap-2 bg-slate-950/20 backdrop-blur-md pl-3.5 pr-1.5 py-1.5 rounded-full border border-white/20 shadow-inner">
-              <span className="text-xs font-extrabold text-slate-950 uppercase tracking-wider hidden xl:inline">
+            {/* REDES SOCIALES DESKTOP */}
+            <div className="hidden xl:flex items-center gap-2 bg-slate-950/20 backdrop-blur-md pl-3.5 pr-1.5 py-1.5 rounded-full border border-white/20 shadow-inner">
+              <span className="text-xs font-extrabold text-slate-950 uppercase tracking-wider">
                 Contáctanos:
               </span>
               <div className="flex items-center gap-1.5">
@@ -207,7 +211,6 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  title="Instagram IMAS"
                   className="w-8 h-8 rounded-full bg-slate-950 text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:text-white flex items-center justify-center transition-all duration-300 shadow-md hover:scale-110"
                 >
                   <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -220,30 +223,93 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
-                  title="WhatsApp IMAS"
                   className="w-8 h-8 rounded-full bg-slate-950 text-white hover:bg-[#25D366] hover:text-white flex items-center justify-center transition-all duration-300 shadow-md hover:scale-110"
                 >
                   <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.301-.15-1.785-.881-2.062-.982-.276-.101-.477-.15-.677.15-.199.301-.775.982-.95 1.183-.175.201-.351.226-.652.075-1.723-.86-2.861-1.529-4.004-3.489-.302-.519.302-.482.864-1.606.099-.201.049-.376-.025-.526-.075-.15-.677-1.631-.928-2.233-.244-.585-.494-.506-.677-.516-.174-.008-.375-.01-.576-.01-.2 0-.526.075-.802.376-.276.301-1.052 1.028-1.052 2.508 0 1.48 1.077 2.909 1.227 3.11 0.15.201 2.119 3.237 5.135 4.54 2.138.924 2.977.94 4.02.787.671-.099 1.785-.729 2.036-1.432.251-.703.251-1.304.176-1.432-.076-.127-.276-.227-.577-.377z"/>
                   </svg>
                 </a>
+              </div>
+            </div>
 
+            {/* HAMBURGER MENU BUTTON PARA MÓVIL */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden bg-slate-950 hover:bg-slate-900 text-white p-2 rounded-full border border-white/20 shadow-md flex items-center justify-center transition-all cursor-pointer"
+              aria-label="Abrir menú de navegación"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5 text-imas-pink" /> : <Menu className="w-5 h-5 text-white" />}
+            </button>
+          </div>
+        </div>
+
+        {/* DRAWER DESPLEGABLE MÓVIL */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-[#14030a]/95 backdrop-blur-2xl border-b border-imas-pink/30 px-4 py-5 flex flex-col gap-3 shadow-2xl animate-in slide-in-from-top-4 duration-300">
+            <nav className="flex flex-col gap-1.5">
+              {[
+                { name: 'Inicio', href: '#inicio' },
+                { name: 'Nosotros', href: '#nosotros' },
+                { name: 'Objetivos', href: '#objetivos' },
+                { name: 'Servicios', href: '#servicios' },
+                { name: 'Contacto', href: '#contacto' },
+              ].map((item) => (
                 <a
-                  href="https://www.facebook.com"
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-extrabold text-sm bg-slate-900/60 border border-slate-800/80 active:bg-imas-pink/20 transition-all"
+                >
+                  <span>{item.name}</span>
+                  <ChevronRight className="w-4 h-4 text-imas-pink" />
+                </a>
+              ))}
+            </nav>
+
+            <div className="pt-2 border-t border-slate-800/80 flex flex-col gap-2.5">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setQuoteModalOpen(true);
+                }}
+                className="w-full bg-white text-[#E52E71] font-black text-xs py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg"
+              >
+                <span>Cotizar Operación</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setChatOpen(true);
+                }}
+                className="w-full bg-slate-900 text-white font-bold text-xs py-3 rounded-xl border border-imas-pink/50 flex items-center justify-center gap-2 shadow-lg"
+              >
+                <Bot className="w-4 h-4 text-imas-pink" />
+                <span>Chatea con nuestra IA</span>
+              </button>
+
+              <div className="flex items-center justify-center gap-3 pt-1">
+                <a
+                  href="https://www.instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  title="Facebook IMAS"
-                  className="w-8 h-8 rounded-full bg-slate-950 text-white hover:bg-[#1877F2] hover:text-white flex items-center justify-center transition-all duration-300 shadow-md hover:scale-110"
+                  className="flex items-center gap-1.5 text-xs text-slate-300 font-bold bg-slate-900 px-3.5 py-1.5 rounded-full border border-slate-800"
                 >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
+                  <span>Instagram</span>
+                </a>
+                <a
+                  href="https://wa.me/523141053428?text=Hola%20IMAS%20Agencia%20Aduanal,%20deseo%20más%20información"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold bg-slate-900 px-3.5 py-1.5 rounded-full border border-slate-800"
+                >
+                  <span>WhatsApp</span>
                 </a>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </header>
 
       {/* 2. HERO CON VIDEO DE FONDO Y CONTROLES CRUD ADMIN */}

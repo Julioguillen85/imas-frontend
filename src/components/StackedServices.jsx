@@ -16,7 +16,7 @@ const DEFAULT_CARDS = [
     features: [
       'Despacho y liberación de mercancías',
       'Clasificación arancelaria y NOMs',
-      'Padrón de importadores SAT',
+      'Padrón de importadores',
       'Asesoría en comercio exterior',
     ],
     cta: 'Explorar servicios aduanales',
@@ -136,6 +136,31 @@ export default function StackedServices({ adminToken }) {
       .catch(() => {});
   }, []);
 
+  // Force play mobile service videos on user touch or scroll
+  React.useEffect(() => {
+    const playAllServiceVideos = () => {
+      const videos = document.querySelectorAll('#servicios video');
+      videos.forEach((vid) => {
+        vid.defaultMuted = true;
+        vid.muted = true;
+        vid.playsInline = true;
+        vid.play().catch(() => {});
+      });
+    };
+
+    playAllServiceVideos();
+
+    window.addEventListener('touchstart', playAllServiceVideos, { passive: true });
+    window.addEventListener('pointerdown', playAllServiceVideos, { passive: true });
+    window.addEventListener('scroll', playAllServiceVideos, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', playAllServiceVideos);
+      window.removeEventListener('pointerdown', playAllServiceVideos);
+      window.removeEventListener('scroll', playAllServiceVideos);
+    };
+  }, [cards]);
+
   return (
     <section id="servicios" className="relative z-10 bg-transparent py-12">
       {/* Header fijo de la sección */}
@@ -157,7 +182,7 @@ export default function StackedServices({ adminToken }) {
           return (
             <div
               key={card.id}
-              className="sticky px-4 sm:px-6"
+              className="sticky px-3 sm:px-6"
               style={{
                 top: card.topOffset,
                 zIndex: card.zIndex,
@@ -173,24 +198,24 @@ export default function StackedServices({ adminToken }) {
                   willChange: 'transform',
                 }}
               >
-                <div className="grid md:grid-cols-2 gap-0 min-h-[500px]">
+                <div className="grid md:grid-cols-2 gap-0 min-h-0 md:min-h-[500px]">
                   {/* Columna izquierda — contenido */}
-                  <div className="p-8 sm:p-12 flex flex-col justify-between relative z-10">
+                  <div className="p-6 sm:p-12 flex flex-col justify-between relative z-10">
                     {/* Top */}
                     <div>
-                      <div className="flex items-center gap-3 mb-6">
+                      <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6">
                         <div
-                          className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 border"
+                          className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 border"
                           style={{
                             background: card.accentBg,
                             color: card.accent,
                             borderColor: `${card.accent}33`,
                           }}
                         >
-                          <Icon className="w-7 h-7" />
+                          <Icon className="w-5 h-5 sm:w-7 sm:h-7" />
                         </div>
                         <span
-                          className="text-xs sm:text-sm font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full border"
+                          className="text-[11px] sm:text-sm font-bold uppercase tracking-widest px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full border truncate"
                           style={{
                             color: card.accent,
                             background: card.accentBg,
@@ -201,19 +226,19 @@ export default function StackedServices({ adminToken }) {
                         </span>
                       </div>
 
-                      <h3 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-4">
+                      <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight mb-3 sm:mb-4">
                         {card.title}
                       </h3>
-                      <p className="text-slate-200 text-base leading-relaxed mb-8 font-normal">
+                      <p className="text-slate-200 text-xs sm:text-base leading-relaxed mb-6 sm:mb-8 font-normal">
                         {card.description}
                       </p>
 
                       {/* Lista de características */}
-                      <ul className="space-y-3">
+                      <ul className="space-y-2 sm:space-y-3">
                         {card.features.map((feat, i) => (
-                          <li key={i} className="flex items-center gap-3 text-base text-slate-100 font-medium">
+                          <li key={i} className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-base text-slate-100 font-medium">
                             <span
-                              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                              className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0"
                               style={{ background: card.accent }}
                             />
                             {feat}
@@ -225,27 +250,31 @@ export default function StackedServices({ adminToken }) {
                     {/* CTA */}
                     <a
                       href="#contacto"
-                      className="group/btn inline-flex items-center gap-3 mt-8 text-base font-bold transition-colors w-fit"
+                      className="group/btn inline-flex items-center gap-2.5 sm:gap-3 mt-6 sm:mt-8 text-xs sm:text-base font-bold transition-colors w-fit"
                       style={{ color: card.accent }}
                     >
                       <span>{card.cta}</span>
                       <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center transition-transform group-hover/btn:translate-x-1"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-transform group-hover/btn:translate-x-1"
                         style={{ background: card.accentBg }}
                       >
-                        <ArrowRight className="w-4.5 h-4.5" />
+                        <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                       </div>
                     </a>
                   </div>
 
                   {/* Columna derecha — VIDEO DE FONDO DINÁMICO (hero1, hero2, hero3) */}
-                  <div className="relative min-h-[320px] md:min-h-full overflow-hidden border-t md:border-t-0 md:border-l border-slate-800/60 bg-slate-950">
+                  <div className="relative h-[220px] md:h-auto md:min-h-full overflow-hidden border-t md:border-t-0 md:border-l border-slate-800/60 bg-slate-950">
                     <video
                       src={card.video}
                       autoPlay
                       loop
                       muted
+                      defaultMuted
                       playsInline
+                      preload="auto"
+                      onCanPlay={(e) => e.target.play().catch(() => {})}
+                      onLoadedData={(e) => e.target.play().catch(() => {})}
                       className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                     />
 
@@ -253,22 +282,22 @@ export default function StackedServices({ adminToken }) {
                     <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-950/90 via-slate-950/20 to-transparent pointer-events-none" />
 
                     {/* Card flotante inferior sobre el video */}
-                    <div className="absolute bottom-5 left-5 right-5 backdrop-blur-md bg-slate-950/80 p-4 sm:p-5 rounded-2xl border border-white/10 flex items-center gap-3.5 shadow-xl">
+                    <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 backdrop-blur-md bg-slate-950/80 p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-white/10 flex items-center gap-3 shadow-xl">
                       <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border"
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 border"
                         style={{
                           background: card.accentBg,
                           color: card.accent,
                           borderColor: `${card.accent}33`
                         }}
                       >
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                       <div>
-                        <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400 block">
-                          IMAS Manzanillo • Video en Vivo
+                        <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-400 block truncate">
+                          IMAS Agencia Aduanal • Servicios
                         </span>
-                        <p className="text-white text-sm font-bold leading-tight">
+                        <p className="text-white text-xs sm:text-sm font-bold leading-tight truncate">
                           {card.title}
                         </p>
                       </div>

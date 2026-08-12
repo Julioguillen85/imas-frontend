@@ -6,6 +6,7 @@ export default function AdminHeroModal({ isOpen, onClose, videoToEdit, onSaveSuc
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [videoUrl, setVideoUrl] = useState('/videos/hero1.mp4');
+  const [mobileVideoUrl, setMobileVideoUrl] = useState('/videos/hero1.mp4');
   const [badgeText, setBadgeText] = useState('');
   const [displayOrder, setDisplayOrder] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -16,13 +17,15 @@ export default function AdminHeroModal({ isOpen, onClose, videoToEdit, onSaveSuc
       setTitle(videoToEdit.title || '');
       setSubtitle(videoToEdit.subtitle || '');
       setVideoUrl(videoToEdit.videoUrl || '/videos/hero1.mp4');
+      setMobileVideoUrl(videoToEdit.mobileVideoUrl || videoToEdit.videoUrl || '/videos/hero1.mp4');
       setBadgeText(videoToEdit.badgeText || '');
       setDisplayOrder(videoToEdit.displayOrder || 1);
     } else {
       setTitle('');
       setSubtitle('');
       setVideoUrl('/videos/hero1.mp4');
-      setBadgeText('Operación Logística en Vivo');
+      setMobileVideoUrl('/videos/hero1.mp4');
+      setBadgeText('Operación Logística');
       setDisplayOrder(1);
     }
   }, [videoToEdit, isOpen]);
@@ -38,6 +41,7 @@ export default function AdminHeroModal({ isOpen, onClose, videoToEdit, onSaveSuc
       title,
       subtitle,
       videoUrl,
+      mobileVideoUrl,
       badgeText,
       displayOrder: Number(displayOrder),
       isActive: true,
@@ -94,7 +98,7 @@ export default function AdminHeroModal({ isOpen, onClose, videoToEdit, onSaveSuc
               {videoToEdit ? 'Editar Video de Hero' : 'Agregar Nuevo Video Hero'}
             </h3>
             <p className="text-slate-400 text-xs sm:text-sm">
-              Administra la secuencia de videos principales de la portada
+              Administra la secuencia de videos para Web y Celular Móvil
             </p>
           </div>
         </div>
@@ -136,7 +140,7 @@ export default function AdminHeroModal({ isOpen, onClose, videoToEdit, onSaveSuc
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-                Ruta / URL del Video *
+                Video Web (Escritorio) *
               </label>
               <select
                 value={videoUrl}
@@ -155,16 +159,35 @@ export default function AdminHeroModal({ isOpen, onClose, videoToEdit, onSaveSuc
 
             <div>
               <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-                Etiqueta / Badge Text
+                Video Móvil (Celular) *
               </label>
-              <input
-                type="text"
-                value={badgeText}
-                onChange={(e) => setBadgeText(e.target.value)}
-                placeholder="Ej. Operación Logística en Vivo"
-                className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-imas-pink"
-              />
+              <select
+                value={mobileVideoUrl}
+                onChange={(e) => setMobileVideoUrl(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-imas-pink"
+              >
+                <option value="/videos/hero1.mp4">📱 /videos/hero1.mp4</option>
+                <option value="/videos/hero2.mp4">📱 /videos/hero2.mp4</option>
+                <option value="/videos/hero3.mp4">📱 /videos/hero3.mp4</option>
+                <option value="/videos/hero4.mp4">📱 /videos/hero4.mp4</option>
+                <option value="/videos/agenciav1.mp4">📱 /videos/agenciav1.mp4</option>
+                <option value="/videos/agenciav2.mp4">📱 /videos/agenciav2.mp4</option>
+                <option value="/videos/agenciav3.mp4">📱 /videos/agenciav3.mp4</option>
+              </select>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+              Etiqueta / Badge Text
+            </label>
+            <input
+              type="text"
+              value={badgeText}
+              onChange={(e) => setBadgeText(e.target.value)}
+              placeholder="Ej. Operación Logística"
+              className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-imas-pink"
+            />
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">

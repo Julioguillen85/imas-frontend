@@ -4,6 +4,7 @@ import {
   MessageSquare, ArrowRight, RefreshCw, ShieldCheck, Send 
 } from 'lucide-react';
 import { API_BASE_URL } from '../config/api';
+import { formatPhoneNumber } from '../utils/phoneFormatter';
 
 export default function ContactQuoteModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -90,13 +91,13 @@ export default function ContactQuoteModal({ isOpen, onClose }) {
           </button>
         </div>
 
-        {/* NOTIFICACIÓN CORREO DE PRUEBA */}
+        {/* GARANTÍA DE PRIVACIDAD */}
         <div className="bg-slate-950/80 border-b border-slate-800 px-6 py-2.5 flex items-center justify-between text-xs text-slate-400">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2 text-slate-300">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            Notificación directa hacia: <strong className="text-pink-400 font-mono">julioguillen85@gmail.com</strong>
+            Atención prioritaria y confidencial
           </span>
-          <span className="text-[11px] text-emerald-400 font-semibold">Despacho Inmediato</span>
+          <span className="text-[11px] text-emerald-400 font-semibold">Respuesta Rápida</span>
         </div>
 
         {/* CONTENIDO DEL MODAL */}
@@ -110,9 +111,6 @@ export default function ContactQuoteModal({ isOpen, onClose }) {
               <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
                 Hemos recibido tu información y un ejecutivo de **IMAS Agencia Aduanal** analizará tu embarque para brindarte la propuesta más ágil y económica.
               </p>
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 text-xs text-slate-400 max-w-md mx-auto">
-                📧 Correo de prueba despachado a: <span className="text-pink-400 font-bold">julioguillen85@gmail.com</span>
-              </div>
               <button
                 onClick={resetAndClose}
                 className="bg-slate-800 hover:bg-slate-700 text-white font-bold px-8 py-3 rounded-full text-xs transition-colors shadow-lg mt-4 cursor-pointer"
@@ -175,7 +173,7 @@ export default function ContactQuoteModal({ isOpen, onClose }) {
                       type="tel"
                       placeholder="+52 (314) 000 0000"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, phone: formatPhoneNumber(e.target.value) })}
                       className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-imas-pink transition-colors"
                     />
                   </div>
@@ -208,10 +206,12 @@ export default function ContactQuoteModal({ isOpen, onClose }) {
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-imas-pink transition-colors"
                 >
                   <option value="Importación Marítima (FCL/LCL)">Importación Marítima (FCL/LCL)</option>
-                  <option value="Despacho y Trámites Aduanales Manzanillo">Despacho y Trámites Aduanales Manzanillo</option>
+                  <option value="Despacho y Trámites Aduanales">Despacho y Trámites Aduanales</option>
                   <option value="Flete Terrestre Multimodal Nacional">Flete Terrestre Multimodal Nacional</option>
                   <option value="Resguardo, Almacenaje y Maniobras">Resguardo, Almacenaje y Maniobras</option>
-                  <option value="Alta y Reactivación de Padrón SAT">Alta y Reactivación de Padrón SAT</option>
+                  <option value="Seguro de Mercancías">Seguro de Mercancías</option>
+                  <option value="Etiquetado de Mercancías dentro y fuera de puerto">Etiquetado de Mercancías dentro y fuera de puerto</option>
+                  <option value="Alta y Reactivación de Padrón">Alta y Reactivación de Padrón</option>
                   <option value="Asesoría Legal y Defensa Aduanera">Asesoría Legal y Defensa Aduanera</option>
                   <option value="Otro Requerimiento Especial">Otro Requerimiento Especial</option>
                 </select>

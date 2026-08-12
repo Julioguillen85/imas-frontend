@@ -51,7 +51,8 @@ export default function LogisticsCanvas() {
 
     const initNodes = () => {
       nodes.length = 0;
-      for (let i = 0; i < NODE_COUNT; i++) {
+      const count = width < 768 ? 24 : 75;
+      for (let i = 0; i < count; i++) {
         const isIcon = i % 3 === 0; // Cada 3º nodo es un ícono logístico
         const iconSymbol = LOGISTICS_ICONS[Math.floor(Math.random() * LOGISTICS_ICONS.length)];
 
@@ -60,7 +61,7 @@ export default function LogisticsCanvas() {
           y: Math.random() * height,
           vx: (Math.random() - 0.5) * 0.8,
           vy: (Math.random() - 0.5) * 0.8,
-          radius: isIcon ? 18 : Math.random() * 3 + 2,
+          radius: isIcon ? (width < 768 ? 14 : 18) : Math.random() * 3 + 2,
           isIcon,
           iconSymbol,
           color: Math.random() > 0.4 ? '#E52E71' : (Math.random() > 0.5 ? '#38BDF8' : '#F8FAFC'),
@@ -188,12 +189,12 @@ export default function LogisticsCanvas() {
 
             if (nearMouse) {
               ctx.strokeStyle = node.isIcon || other.isIcon
-                ? `rgba(56, 189, 248, ${alpha})`
-                : `rgba(229, 46, 113, ${alpha})`;
-              ctx.lineWidth = 1.6;
+                ? `rgba(56, 189, 248, ${alpha * 0.7})`
+                : `rgba(229, 46, 113, ${alpha * 0.7})`;
+              ctx.lineWidth = 1.4;
             } else {
-              ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.6})`;
-              ctx.lineWidth = 0.8;
+              ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.25})`;
+              ctx.lineWidth = 0.6;
             }
             ctx.stroke();
           }
@@ -203,22 +204,22 @@ export default function LogisticsCanvas() {
         if (node.isIcon) {
           ctx.save();
           ctx.translate(node.x, node.y);
-          ctx.globalAlpha = isHovered ? 0.6 : 0.25; // Íconos sutiles y transparentes para mejor lectura
+          ctx.globalAlpha = isHovered ? 0.45 : 0.15; // Íconos aún más sutiles y oscuros
 
-          const scale = (isHovered ? 1.5 : 1.1) * pulseScale;
+          const scale = (isHovered ? 1.4 : 1.0) * pulseScale;
           ctx.scale(scale, scale);
 
-          ctx.font = '22px sans-serif';
+          ctx.font = '20px sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
 
           // Resplandor del ícono si está cerca del ratón
           if (isHovered) {
             ctx.shadowColor = '#E52E71';
-            ctx.shadowBlur = 18;
+            ctx.shadowBlur = 12;
           } else {
-            ctx.shadowColor = 'rgba(56, 189, 248, 0.3)';
-            ctx.shadowBlur = 6;
+            ctx.shadowColor = 'rgba(56, 189, 248, 0.2)';
+            ctx.shadowBlur = 4;
           }
 
           ctx.fillText(node.iconSymbol, 0, 0);
@@ -226,7 +227,7 @@ export default function LogisticsCanvas() {
         } else {
           // Nodo punto neuronal
           ctx.beginPath();
-          const currentRadius = node.radius * pulseScale * (isHovered ? 2.0 : 1.0);
+          const currentRadius = node.radius * pulseScale * (isHovered ? 1.8 : 0.9);
           ctx.arc(node.x, node.y, currentRadius, 0, Math.PI * 2);
 
           const nodeColor = isHovered ? '#E52E71' : node.color;
@@ -234,7 +235,7 @@ export default function LogisticsCanvas() {
 
           if (isHovered || node.isHub) {
             ctx.shadowColor = nodeColor;
-            ctx.shadowBlur = isHovered ? 18 : 10;
+            ctx.shadowBlur = isHovered ? 12 : 6;
           }
 
           ctx.fill();
@@ -243,9 +244,9 @@ export default function LogisticsCanvas() {
           // Anillo decorativo en nodos Hub
           if (node.isHub) {
             ctx.beginPath();
-            ctx.arc(node.x, node.y, currentRadius * 2.2, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(229, 46, 113, 0.5)';
-            ctx.lineWidth = 1;
+            ctx.arc(node.x, node.y, currentRadius * 2.0, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(229, 46, 113, 0.3)';
+            ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         }
@@ -268,7 +269,7 @@ export default function LogisticsCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-10 opacity-100"
+      className="fixed inset-0 pointer-events-none z-10 opacity-70"
     />
   );
 }

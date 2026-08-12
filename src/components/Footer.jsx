@@ -6,12 +6,13 @@ import {
 import AdminFooterModal from './AdminFooterModal';
 import ContactQuoteModal from './ContactQuoteModal';
 import { API_BASE_URL } from '../config/api';
+import { formatPhoneNumber } from '../utils/phoneFormatter';
 
 export default function Footer({ adminToken, onOpenQuote }) {
   const [settings, setSettings] = useState({
     footer_email: 'info@imasagenciaaduanal.com',
     footer_phone: '+52 (314) 105 3428',
-    footer_address: 'Av. Paseo de las gaviotas #190, Col. Valle de las garzas. Manzanillo, Col.',
+    footer_address: 'Av. Paseo de las gaviotas #190, Col. Valle de las garzas.',
     footer_rights: '© 2026 IMAS Agencia Aduanal. Todos los derechos reservados.',
   });
 
@@ -106,19 +107,19 @@ export default function Footer({ adminToken, onOpenQuote }) {
           </div>
 
           {/* LISTÓN DE ESLOGAN DE LA IMAGEN */}
-          <div className="bg-white px-8 py-3.5 rounded-full shadow-2xl transform hover:scale-105 transition-transform border border-white/40">
-            <span className="text-xl sm:text-3xl font-extrabold text-[#E52E71] italic tracking-tight font-serif">
+          <div className="bg-white px-4 sm:px-8 py-2.5 sm:py-3.5 rounded-full shadow-2xl transform hover:scale-105 transition-transform border border-white/40 max-w-full text-center">
+            <span className="text-xs sm:text-2xl lg:text-3xl font-black text-[#E52E71] tracking-tight font-['Outfit',sans-serif] drop-shadow-sm leading-snug block">
               ¡Transporta tu cadena logística a otro nivel!
             </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button
               onClick={() => {
                 if (onOpenQuote) onOpenQuote();
                 else setIsQuoteModalOpen(true);
               }}
-              className="inline-flex items-center gap-2 bg-slate-950 hover:bg-slate-900 text-white font-bold text-sm px-6 py-3 rounded-full transition-all shadow-xl border border-white/20 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full transition-all shadow-xl border border-white/20 cursor-pointer"
             >
               <span>Cotizar Operación</span>
               <ArrowRight className="w-4 h-4 text-imas-pink" />
@@ -128,7 +129,7 @@ export default function Footer({ adminToken, onOpenQuote }) {
             {adminToken && (
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="px-4 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-2 transition-all shadow-xl cursor-pointer"
+                className="w-full sm:w-auto justify-center px-4 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-2 transition-all shadow-xl cursor-pointer"
               >
                 <Edit2 className="w-4 h-4" />
                 <span>Editar Footer</span>
@@ -142,10 +143,22 @@ export default function Footer({ adminToken, onOpenQuote }) {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 items-start">
           
-          {/* COLUMNA 1: INFORMACIÓN DE CONTACTO EXACTA DE LA IMAGEN (4 cols) */}
-          <div className="lg:col-span-4 space-y-6 bg-slate-950/30 p-7 rounded-3xl border border-white/15 backdrop-blur-md shadow-xl">
-            <h3 className="text-xl font-black uppercase tracking-wider text-white border-b border-white/20 pb-3 flex items-center gap-2">
-              <Globe className="w-5 h-5 text-white/90" />
+          {/* COLUMNA 1: IDENTIDAD Y CONTACTO OFICIAL (4 cols) */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <img
+                  src="/images/logo1.png"
+                  alt="IMAS Agencia Aduanal"
+                  className="h-12 w-auto object-contain drop-shadow-lg"
+                />
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed font-light">
+                Soluciones logísticas y aduanales integrales. Garantizamos seguridad, rapidez y total apego a la normativa para el éxito de tus operaciones.
+              </p>
+            </div>
+
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-white/20 pb-2 flex items-center gap-2">
               <span>Contacto Directo</span>
             </h3>
 
@@ -157,7 +170,7 @@ export default function Footer({ adminToken, onOpenQuote }) {
                 </div>
                 <div className="leading-snug pt-0.5">
                   <strong className="block text-white font-bold">Ubicación Oficial:</strong>
-                  <span className="text-white/90 text-xs">{settings.footer_address || 'Av. Paseo de las gaviotas #190, Col. Valle de las garzas. Manzanillo, Col.'}</span>
+                  <span className="text-white/90 text-xs">{settings.footer_address || 'Av. Paseo de las gaviotas #190, Col. Valle de las garzas.'}</span>
                 </div>
               </li>
 
@@ -173,13 +186,13 @@ export default function Footer({ adminToken, onOpenQuote }) {
                 </div>
               </li>
 
-              {/* TELÉFONO */}
+              {/* TELÉFONOS */}
               <li className="flex items-start gap-3.5">
                 <div className="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 border border-white/20 text-white shadow-md">
                   <Phone className="w-4 h-4" />
                 </div>
-                <div className="leading-tight pt-1 flex flex-wrap gap-x-4 gap-y-1">
-                  <a href={`tel:${settings.footer_phone}`} className="hover:underline font-bold text-white text-sm">
+                <div className="leading-tight pt-1 flex flex-col gap-1.5">
+                  <a href={`tel:${(settings.footer_phone || '+52 (314) 105 3428').replace(/[^+\d]/g, '')}`} className="hover:underline font-bold text-white text-sm">
                     {settings.footer_phone || '+52 (314) 105 3428'}
                   </a>
                 </div>
@@ -200,12 +213,6 @@ export default function Footer({ adminToken, onOpenQuote }) {
                 </a>
               </li>
             </ul>
-
-            <div className="pt-2 border-t border-white/15">
-              <span className="text-[11px] text-white/80 block">
-                🔔 Las consultas se notifican a: <strong>julioguillen85@gmail.com</strong>
-              </span>
-            </div>
           </div>
 
           {/* COLUMNA 2: FORMULARIO DE CONTACTO Y COTIZACIÓN RÁPIDA (5 cols) */}
@@ -218,84 +225,87 @@ export default function Footer({ adminToken, onOpenQuote }) {
             {sentSuccess ? (
               <div className="py-8 text-center space-y-3 animate-in zoom-in-95">
                 <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
-                <h4 className="text-lg font-bold text-white">¡Mensaje Despachado!</h4>
+                <h4 className="text-lg font-bold text-white">¡Mensaje Enviado con Éxito!</h4>
                 <p className="text-xs text-white/80 leading-relaxed">
-                  Tu solicitud ha sido enviada con éxito. Se ha enviado una notificación de prueba a <strong className="text-white font-mono">julioguillen85@gmail.com</strong>.
+                  Tu solicitud ha sido recibida con éxito. Nuestro equipo de asesores especializados se pondrá en contacto contigo a la brevedad.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleQuickSubmit} className="mt-4 space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[10px] uppercase font-bold text-white/80 mb-1">Nombre *</label>
+                    <label className="block text-[10px] uppercase font-extrabold text-white mb-1">Nombre *</label>
                     <input
                       type="text"
                       required
                       placeholder="Tu nombre"
                       value={quickForm.name}
                       onChange={(e) => setQuickForm({ ...quickForm, name: e.target.value })}
-                      className="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3 py-2 text-xs text-white placeholder-white/40 focus:outline-none focus:border-white focus:bg-slate-900"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-950 transition-all shadow-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-bold text-white/80 mb-1">Email *</label>
+                    <label className="block text-[10px] uppercase font-extrabold text-white mb-1">Email *</label>
                     <input
                       type="email"
                       required
                       placeholder="correo@empresa.com"
                       value={quickForm.email}
                       onChange={(e) => setQuickForm({ ...quickForm, email: e.target.value })}
-                      className="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3 py-2 text-xs text-white placeholder-white/40 focus:outline-none focus:border-white focus:bg-slate-900"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-950 transition-all shadow-sm"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[10px] uppercase font-bold text-white/80 mb-1">Teléfono</label>
+                    <label className="block text-[10px] uppercase font-extrabold text-white mb-1">Teléfono</label>
                     <input
                       type="tel"
-                      placeholder="+52 314..."
+                      placeholder="+52 (314) 000 0000"
                       value={quickForm.phone}
-                      onChange={(e) => setQuickForm({ ...quickForm, phone: e.target.value })}
-                      className="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3 py-2 text-xs text-white placeholder-white/40 focus:outline-none focus:border-white focus:bg-slate-900"
+                      onChange={(e) => setQuickForm({ ...quickForm, phone: formatPhoneNumber(e.target.value) })}
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-950 transition-all shadow-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-bold text-white/80 mb-1">Empresa</label>
+                    <label className="block text-[10px] uppercase font-extrabold text-white mb-1">Empresa</label>
                     <input
                       type="text"
                       placeholder="Nombre de empresa"
                       value={quickForm.company}
                       onChange={(e) => setQuickForm({ ...quickForm, company: e.target.value })}
-                      className="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3 py-2 text-xs text-white placeholder-white/40 focus:outline-none focus:border-white focus:bg-slate-900"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-950 transition-all shadow-sm"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] uppercase font-bold text-white/80 mb-1">Operación / Requerimiento</label>
+                  <label className="block text-[10px] uppercase font-extrabold text-white mb-1">Operación / Requerimiento</label>
                   <select
                     value={quickForm.operationType}
                     onChange={(e) => setQuickForm({ ...quickForm, operationType: e.target.value })}
-                    className="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-white"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-950 transition-all shadow-sm"
                   >
                     <option value="Importación Marítima (FCL/LCL)" className="text-slate-900">Importación Marítima (FCL/LCL)</option>
-                    <option value="Despacho Aduanal Manzanillo" className="text-slate-900">Despacho Aduanal Manzanillo</option>
+                    <option value="Despacho Aduanal" className="text-slate-900">Despacho Aduanal</option>
                     <option value="Flete Terrestre Multimodal" className="text-slate-900">Flete Terrestre Multimodal</option>
                     <option value="Resguardo y Almacenaje" className="text-slate-900">Resguardo y Almacenaje</option>
-                    <option value="Asesoría Legal / Padrón SAT" className="text-slate-900">Asesoría Legal / Padrón SAT</option>
+                    <option value="Seguro de Mercancías" className="text-slate-900">Seguro de Mercancías</option>
+                    <option value="Etiquetado de Mercancías dentro y fuera de puerto" className="text-slate-900">Etiquetado de Mercancías dentro y fuera de puerto</option>
+                    <option value="Padrón de Importadores" className="text-slate-900">Padrón de Importadores</option>
+                    <option value="Defensa y Asesoría Legal" className="text-slate-900">Defensa y Asesoría Legal</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] uppercase font-bold text-white/80 mb-1">Mensaje</label>
+                  <label className="block text-[10px] uppercase font-extrabold text-white mb-1">Mensaje</label>
                   <textarea
                     rows="2"
                     placeholder="Detalles sobre tu mercancía o dudas de importación/exportación..."
                     value={quickForm.message}
                     onChange={(e) => setQuickForm({ ...quickForm, message: e.target.value })}
-                    className="w-full bg-slate-900/80 border border-white/20 rounded-xl p-2 text-xs text-white placeholder-white/40 focus:outline-none focus:border-white resize-none"
+                    className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-950 resize-none transition-all shadow-sm"
                   ></textarea>
                 </div>
 
@@ -328,10 +338,12 @@ export default function Footer({ adminToken, onOpenQuote }) {
                 <span>Nuestros Servicios</span>
               </h4>
               <ul className="space-y-2 text-xs text-white/90 font-medium">
-                <li className="hover:text-white transition-colors">• Despacho Aduanal Manzanillo</li>
+                <li className="hover:text-white transition-colors">• Despacho Aduanal</li>
                 <li className="hover:text-white transition-colors">• Flete Terrestre & Marítimo</li>
                 <li className="hover:text-white transition-colors">• Resguardo & Almacenaje</li>
-                <li className="hover:text-white transition-colors">• Padrón de Importadores SAT</li>
+                <li className="hover:text-white transition-colors">• Padrón de Importadores</li>
+                <li className="hover:text-white transition-colors">• Seguro de Mercancías</li>
+                <li className="hover:text-white transition-colors">• Etiquetado de Mercancías dentro y fuera de puerto</li>
                 <li className="hover:text-white transition-colors">• Defensa y Asesoría Legal</li>
                 <li className="hover:text-white transition-colors">• Sanitizado de Contenedores</li>
               </ul>
