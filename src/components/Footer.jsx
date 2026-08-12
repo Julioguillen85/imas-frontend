@@ -33,7 +33,9 @@ export default function Footer({ adminToken, onOpenQuote }) {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/public/settings`);
+      const response = await fetch(`${API_BASE_URL}/api/v1/public/settings`, {
+        cache: 'no-store'
+      });
       if (response.ok) {
         const data = await response.json();
         if (data && Object.keys(data).length > 0) {
