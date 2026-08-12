@@ -43,10 +43,17 @@
 </IfModule>
 
 # ==============================================================================
-# Cabeceras de seguridad
+# Cabeceras de seguridad y control estricto de caché para index.html
 # ==============================================================================
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
   Header set X-XSS-Protection "1; mode=block"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Evitar que los móviles guarden index.html en caché
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
 </IfModule>
