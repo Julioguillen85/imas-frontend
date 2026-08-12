@@ -1,4 +1,15 @@
 // Configuración centralizada de la URL de la API Backend
-// Por defecto en desarrollo usa http://localhost:8080
-// En producción tomará el valor configurado en las variables de entorno (VITE_API_URL)
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+// Resuelve dinámicamente la IP del host en red local (ej: http://192.168.x.x:8080) para celulares
+const getDynamicApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  if (typeof window !== 'undefined' && window.location && window.location.hostname) {
+    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    const hostname = window.location.hostname;
+    return `${protocol}//${hostname}:8080`;
+  }
+  return 'http://localhost:8080';
+};
+
+export const API_BASE_URL = getDynamicApiUrl();

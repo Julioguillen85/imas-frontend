@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Mail, Phone, MapPin, Shield } from 'lucide-react';
 import { API_BASE_URL } from '../config/api';
+import { formatPhoneNumber } from '../utils/phoneFormatter';
 
-export default function AdminFooterModal({ isOpen, onClose, initialSettings, onSaveSuccess, token }) {
+export default function AdminFooterModal({
+  isOpen,
+  onClose,
+  initialSettings,
+  initialData,
+  onSaveSuccess,
+  onSuccess,
+  token,
+  adminToken
+}) {
+  const settingsData = initialSettings || initialData;
+  const authToken = token || adminToken;
+  const handleSaveSuccess = onSaveSuccess || onSuccess;
+
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -11,13 +25,13 @@ export default function AdminFooterModal({ isOpen, onClose, initialSettings, onS
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (initialSettings) {
-      setEmail(initialSettings.footer_email || 'info@imasagenciaaduanal.com');
-      setPhone(initialSettings.footer_phone || '+52 (314) 105 3428');
-      setAddress(initialSettings.footer_address || 'Puerto de Manzanillo, Colima, México');
-      setRights(initialSettings.footer_rights || '© 2026 IMAS Agencia Aduanal. Todos los derechos reservados.');
+    if (settingsData) {
+      setEmail(settingsData.footer_email || 'info@imasagenciaaduanal.com');
+      setPhone(formatPhoneNumber(settingsData.footer_phone || '+52 (314) 105 3428'));
+      setAddress(settingsData.footer_address || 'Av. Paseo de las gaviotas #190, Col. Valle de las garzas.');
+      setRights(settingsData.footer_rights || '© 2026 IMAS Agencia Aduanal. Todos los derechos reservados.');
     }
-  }, [initialSettings, isOpen]);
+  }, [settingsData, isOpen]);
 
   if (!isOpen) return null;
 
@@ -38,16 +52,19 @@ export default function AdminFooterModal({ isOpen, onClose, initialSettings, onS
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': authToken ? `Bearer ${authToken}` : '',
         },
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        throw new Error('Error al actualizar datos del pie de página');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || 'Error al actualizar datos del pie de página');
       }
 
-      onSaveSuccess();
+      if (handleSaveSuccess) {
+        handleSaveSuccess();
+      }
       onClose();
     } catch (err) {
       setError(err.message || 'Error al guardar');
@@ -109,7 +126,7 @@ export default function AdminFooterModal({ isOpen, onClose, initialSettings, onS
               type="text"
               required
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
               placeholder="+52 (314) 105 3428"
               className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-imas-pink"
             />
@@ -124,7 +141,7 @@ export default function AdminFooterModal({ isOpen, onClose, initialSettings, onS
               required
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder="Puerto de Manzanillo, Colima, México"
+              placeholder="Av. Paseo de las gaviotas #190, Col. Valle de las garzas."
               className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-imas-pink"
             />
           </div>

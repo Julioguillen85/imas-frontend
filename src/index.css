@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@layer base {
+  html, body {
+    overflow-x: clip;
+    max-width: 100vw;
+    width: 100%;
+  }
+}
+
 @theme {
   --color-imas-pink: #E52E71;
   --color-imas-pinkHover: #C2185B;

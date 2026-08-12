@@ -421,7 +421,7 @@ export default function AdminDashboard({ adminToken, adminUser, onLogout, onBack
                 <div className="flex items-center gap-3">
                   <div className="bg-slate-900 border border-slate-700/80 px-4 py-2 rounded-2xl flex items-center gap-2 text-xs text-slate-300">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>Notificaciones a: <strong className="text-pink-400 font-mono">julioguillen85@gmail.com</strong></span>
+                    <span>Notificaciones activas en tiempo real</span>
                   </div>
                   <button
                     onClick={loadData}
@@ -625,7 +625,7 @@ export default function AdminDashboard({ adminToken, adminUser, onLogout, onBack
                               </span>
                               <span className="text-slate-600 hidden sm:inline">•</span>
                               <span className="text-slate-400">
-                                Notificación despachada a: <strong className="text-slate-300 font-mono">{lead.testEmailTarget || 'julioguillen85@gmail.com'}</strong>
+                                Notificación enviada a: <strong className="text-slate-300 font-mono">{lead.testEmailTarget || 'info@imasagenciaaduanal.com'}</strong>
                               </span>
                             </div>
 

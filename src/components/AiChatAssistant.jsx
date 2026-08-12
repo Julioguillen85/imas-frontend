@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Bot, Send, X, Sparkles, CheckCircle2, User, Phone, Mail, Building2, 
-  Package, ArrowRight, RefreshCw, ChevronDown, ChevronUp, ShieldCheck, AlertCircle 
+  Package, ArrowRight, RefreshCw, ChevronDown, ChevronUp, ShieldCheck, AlertCircle, Minus 
 } from 'lucide-react';
 import { API_BASE_URL } from '../config/api';
+import { formatPhoneNumber } from '../utils/phoneFormatter';
 
 export default function AiChatAssistant({ isOpen, onClose }) {
   const [messages, setMessages] = useState([
@@ -19,6 +20,8 @@ export default function AiChatAssistant({ isOpen, onClose }) {
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadFormSubmitted, setLeadFormSubmitted] = useState(false);
   const [isSubmittingLead, setIsSubmittingLead] = useState(false);
+  const [viewportStyle, setViewportStyle] = useState({});
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
 
   const [leadData, setLeadData] = useState({
     name: '',
@@ -30,6 +33,42 @@ export default function AiChatAssistant({ isOpen, onClose }) {
   });
 
   const messagesEndRef = useRef(null);
+
+  // Escuchar cambios de pantalla y del teclado virtual (visualViewport) para celulares
+  useEffect(() => {
+    const updateViewport = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+
+      if (mobile && window.visualViewport) {
+        setViewportStyle({
+          height: `${window.visualViewport.height}px`,
+          top: `${window.visualViewport.offsetTop}px`,
+          bottom: 'auto',
+          left: '0px',
+          right: '0px',
+          width: '100%'
+        });
+      } else {
+        setViewportStyle({});
+      }
+    };
+
+    window.addEventListener('resize', updateViewport);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateViewport);
+      window.visualViewport.addEventListener('scroll', updateViewport);
+    }
+    updateViewport();
+
+    return () => {
+      window.removeEventListener('resize', updateViewport);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', updateViewport);
+        window.visualViewport.removeEventListener('scroll', updateViewport);
+      }
+    };
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -123,7 +162,7 @@ export default function AiChatAssistant({ isOpen, onClose }) {
         const confirmationMsg = {
           id: Date.now().toString(),
           sender: 'bot',
-          text: `✅ **¡Muchas gracias ${leadData.name}!**\n\nHemos registrado tus datos con éxito. Nuestro equipo te contactará al correo **${leadData.email}** y teléfono **${leadData.phone || 'indicado'}**.\n\n*(Se ha enviado la notificación a julioguillen85@gmail.com)*`,
+          text: `✅ **¡Muchas gracias ${leadData.name}!**\n\nHemos registrado tus datos con éxito. Nuestro equipo de asesores se contactará contigo a la brevedad al correo **${leadData.email}** y teléfono **${leadData.phone || 'indicado'}**.`,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         setMessages(prev => [...prev, confirmationMsg]);
@@ -144,41 +183,59 @@ export default function AiChatAssistant({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[430px] h-[610px] max-h-[88vh] bg-slate-900/95 border border-slate-700/90 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-white backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-300">
+    <div
+      className={`fixed z-[100] text-white backdrop-blur-xl transition-all duration-150 flex flex-col overflow-hidden ${
+        isMobile
+          ? 'w-full bg-slate-950 border-none rounded-none'
+          : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-[430px] h-[610px] max-h-[88vh] bg-slate-900/95 border border-slate-700/90 rounded-3xl shadow-2xl animate-in fade-in slide-in-from-bottom-5 duration-300'
+      }`}
+      style={isMobile ? viewportStyle : {}}
+    >
       
       {/* ENCABEZADO DEL CHAT */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-4 border-b border-slate-800 flex items-center justify-between flex-shrink-0">
+      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-3.5 sm:p-4 border-b border-slate-800 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#E52E71] to-[#EF4444] text-white flex items-center justify-center shadow-lg shadow-pink-500/20">
-              <Bot className="w-6 h-6 animate-pulse" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-br from-[#E52E71] to-[#EF4444] text-white flex items-center justify-center shadow-lg shadow-pink-500/20">
+              <Bot className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
             </div>
             <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-bold text-sm text-white">Asistente Virtual IMAS</h3>
-              <span className="bg-imas-pink/20 text-imas-pink text-[10px] font-bold px-2 py-0.5 rounded-full border border-imas-pink/30 flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> IA
+              <h3 className="font-bold text-xs sm:text-sm text-white">Asistente Virtual IMAS</h3>
+              <span className="bg-imas-pink/20 text-imas-pink text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border border-imas-pink/30 flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> IA
               </span>
             </div>
-            <p className="text-[11px] text-emerald-400 font-medium">En línea • Especialista en Manzanillo</p>
+            <p className="text-[10px] sm:text-[11px] text-emerald-400 font-medium">En línea • Especialista en Manzanillo</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           <button
             onClick={() => setShowLeadForm(!showLeadForm)}
-            className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 rounded-xl border border-slate-700 transition-colors flex items-center gap-1 cursor-pointer"
             title="Formulario de cotización"
           >
             <Package className="w-3.5 h-3.5 text-[#E52E71]" />
             <span className="hidden sm:inline">Formulario</span>
             {showLeadForm ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
           </button>
+
+          {/* BOTÓN MINIMIZAR (SOLO MÓVIL / GENERAL) */}
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+            title="Minimizar chat"
+          >
+            <Minus className="w-5 h-5" />
+          </button>
+
+          {/* BOTÓN CERRAR CON X */}
+          <button
+            onClick={onClose}
+            className="p-1.5 text-slate-400 hover:text-white hover:bg-rose-500/20 rounded-xl transition-colors cursor-pointer"
             title="Cerrar chat"
           >
             <X className="w-5 h-5" />
@@ -190,9 +247,9 @@ export default function AiChatAssistant({ isOpen, onClose }) {
       <div className="bg-slate-950/90 border-b border-slate-800/80 px-4 py-2 flex items-center justify-between text-[11px] text-slate-400">
         <span className="flex items-center gap-1.5 text-slate-300">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-          Notificaciones: <strong className="text-pink-400 font-mono">julioguillen85@gmail.com</strong>
+          Atención y Cotizaciones en Tiempo Real
         </span>
-        <span className="text-[10px] text-slate-500 font-mono">Groq Llama-3.3</span>
+        <span className="text-[10px] text-slate-500 font-mono">Asistente IA</span>
       </div>
 
       {/* ÁREA DE MENSAJES */}
@@ -246,7 +303,7 @@ export default function AiChatAssistant({ isOpen, onClose }) {
                 <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
                 <p className="font-bold text-sm text-white">¡Datos enviados con éxito!</p>
                 <p className="text-[11px] text-slate-400">
-                  Notificación enviada a <strong>julioguillen85@gmail.com</strong>
+                  Un asesor se comunicará contigo a la brevedad.
                 </p>
               </div>
             ) : (
@@ -290,9 +347,9 @@ export default function AiChatAssistant({ isOpen, onClose }) {
                       <Phone className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-500" />
                       <input
                         type="tel"
-                        placeholder="+52 314..."
+                        placeholder="+52 (314) 000 0000"
                         value={leadData.phone}
-                        onChange={(e) => setLeadData({ ...leadData, phone: e.target.value })}
+                        onChange={(e) => setLeadData({ ...leadData, phone: formatPhoneNumber(e.target.value) })}
                         className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-8 pr-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-imas-pink"
                       />
                     </div>
@@ -373,7 +430,8 @@ export default function AiChatAssistant({ isOpen, onClose }) {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-          className="flex-1 bg-slate-900 text-xs text-white placeholder-slate-500 rounded-xl px-4 py-3 border border-slate-800 focus:outline-none focus:border-imas-pink shadow-inner"
+          onFocus={() => setTimeout(scrollToBottom, 200)}
+          className="flex-1 bg-slate-900 text-base sm:text-xs text-white placeholder-slate-500 rounded-xl px-4 py-3 border border-slate-800 focus:outline-none focus:border-imas-pink shadow-inner"
         />
         <button
           onClick={() => handleSendMessage()}
