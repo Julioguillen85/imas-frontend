@@ -6,9 +6,15 @@
   RewriteEngine On
   RewriteBase /
 
-  # Redirección a HTTPS (Opcional pero recomendado si tienes certificado SSL activo)
-  # RewriteCond %{HTTPS} off
-  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # Forzar HTTPS en IONOS para evitar bloqueos de contenido mixto en móviles
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Proxy transparente para peticiones /api hacia Railway (mismo dominio para móviles)
+  <IfModule mod_proxy.c>
+    SSLProxyEngine On
+    RewriteRule ^api/(.*)$ https://imas-backend-production.up.railway.app/api/$1 [P,L]
+  </IfModule>
 
   # Si el archivo o carpeta solicitado existe físicamente en el servidor, servirlo directamente
   RewriteCond %{REQUEST_FILENAME} -f [OR]

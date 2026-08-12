@@ -6,6 +6,7 @@ import {
 import AdminFooterModal from './AdminFooterModal';
 import ContactQuoteModal from './ContactQuoteModal';
 import { API_BASE_URL } from '../config/api';
+import { APP_VERSION } from '../config/version';
 import { formatPhoneNumber } from '../utils/phoneFormatter';
 
 export default function Footer({ adminToken, onOpenQuote }) {
@@ -358,7 +359,12 @@ export default function Footer({ adminToken, onOpenQuote }) {
       {/* BARRA INFERIOR DE DERECHOS RESERVADOS, REDES SOCIALES Y LEGALES */}
       <div className="border-t border-white/20 py-6 px-6 bg-slate-950/50 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-medium text-white/90">
-          <p>{settings.footer_rights || `© ${new Date().getFullYear()} IMAS Agencia Aduanal. Todos los derechos reservados.`}</p>
+          <div className="flex flex-wrap items-center gap-3">
+            <p>{settings.footer_rights || `© ${new Date().getFullYear()} IMAS Agencia Aduanal. Todos los derechos reservados.`}</p>
+            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] border border-emerald-500/30 font-bold shadow-sm" title="Versión de Despliegue">
+              {APP_VERSION}
+            </span>
+          </div>
           
           <div className="flex items-center gap-3 my-2 md:my-0">
             <span className="font-extrabold text-white uppercase tracking-wider text-[11px]">SÍGUENOS:</span>

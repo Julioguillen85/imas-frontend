@@ -2,6 +2,10 @@ import React, { StrictMode, Component } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { APP_VERSION } from './config/version.js'
+
+console.log(`%c 🚀 IMAS WEB VERSION: ${APP_VERSION} `, 'background: #E52E71; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 4px;');
+
 
 class GlobalErrorBoundary extends Component {
   constructor(props) {
