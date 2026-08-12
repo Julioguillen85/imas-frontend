@@ -11,8 +11,8 @@ const getDynamicApiUrl = () => {
       return `${protocol}//${hostname}:8080`;
     }
   }
-  // URL por defecto para el backend de producción
-  return 'https://api.imasagenciaaduanal.com';
+  // URL de producción del backend en Railway
+  return 'https://imas-backend-production.up.railway.app';
 };
 
 export const API_BASE_URL = getDynamicApiUrl();
