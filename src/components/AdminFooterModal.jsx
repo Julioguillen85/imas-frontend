@@ -18,7 +18,7 @@ export default function AdminFooterModal({
   const handleSaveSuccess = onSaveSuccess || onSuccess;
 
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phonesList, setPhonesList] = useState(['+52 (618) 151 0581']);
   const [address, setAddress] = useState('');
   const [rights, setRights] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,14 @@ export default function AdminFooterModal({
   useEffect(() => {
     if (settingsData) {
       setEmail(settingsData.footer_email || 'info@imasagenciaaduanal.com');
-      setPhone(formatPhoneNumber(settingsData.footer_phone || '+52 (314) 105 3428'));
+      
+      const rawPhones = settingsData.footer_phone || '+52 (618) 151 0581';
+      const parsed = rawPhones
+        .split(/[,/\n]/)
+        .map((p) => p.trim())
+        .filter(Boolean);
+      setPhonesList(parsed.length > 0 ? parsed : ['+52 (618) 151 0581']);
+      
       setAddress(settingsData.footer_address || 'Av. Paseo de las gaviotas #190, Col. Valle de las garzas.');
       setRights(settingsData.footer_rights || '© 2026 IMAS Agencia Aduanal. Todos los derechos reservados.');
     }
@@ -40,9 +47,11 @@ export default function AdminFooterModal({
     setLoading(true);
     setError('');
 
+    const combinedPhones = phonesList.filter((p) => p.trim() !== '').join(' / ');
+
     const payload = {
       footer_email: email,
-      footer_phone: phone,
+      footer_phone: combinedPhones,
       footer_address: address,
       footer_rights: rights,
     };
@@ -119,17 +128,47 @@ export default function AdminFooterModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-              Teléfono de Contacto *
-            </label>
-            <input
-              type="text"
-              required
-              value={phone}
-              onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
-              placeholder="+52 (314) 105 3428"
-              className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-imas-pink"
-            />
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                Teléfonos de Contacto ({phonesList.length}) *
+              </label>
+              <button
+                type="button"
+                onClick={() => setPhonesList([...phonesList, ''])}
+                className="text-xs font-bold text-imas-pink hover:text-rose-400 flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                + Agregar otro teléfono
+              </button>
+            </div>
+
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+              {phonesList.map((p, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    required
+                    value={p}
+                    onChange={(e) => {
+                      const updated = [...phonesList];
+                      updated[index] = formatPhoneNumber(e.target.value);
+                      setPhonesList(updated);
+                    }}
+                    placeholder="+52 (618) 151 0581"
+                    className="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-imas-pink"
+                  />
+                  {phonesList.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setPhonesList(phonesList.filter((_, i) => i !== index))}
+                      className="p-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl cursor-pointer transition-colors flex-shrink-0"
+                      title="Eliminar este teléfono"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
           <div>

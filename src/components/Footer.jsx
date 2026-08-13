@@ -195,9 +195,19 @@ export default function Footer({ adminToken, onOpenQuote }) {
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="leading-tight pt-1 flex flex-col gap-1.5">
-                  <a href={`tel:${(settings.footer_phone || '+52 (618) 151 0581').replace(/[^+\d]/g, '')}`} className="hover:underline font-bold text-white text-sm">
-                    {settings.footer_phone || '+52 (618) 151 0581'}
-                  </a>
+                  {(settings.footer_phone || '+52 (618) 151 0581')
+                    .split(/[,/\n]/)
+                    .map((p) => p.trim())
+                    .filter(Boolean)
+                    .map((phoneNum, idx) => (
+                      <a
+                        key={idx}
+                        href={`tel:${phoneNum.replace(/[^+\d]/g, '')}`}
+                        className="hover:underline font-bold text-white text-sm block"
+                      >
+                        {phoneNum}
+                      </a>
+                    ))}
                 </div>
               </li>
 
